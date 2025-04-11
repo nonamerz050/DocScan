@@ -27,4 +27,26 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertEqual(storageService.savedName, "Test Document")
         XCTAssertEqual(storageService.savedScan?.pageCount, 2)
     }
+    
+    func testCreateDocument_whenSaveFails_shouldNotClearStateAndSetIsLoadingFalse() async {
+        let storageService = MockDocumentStorageService()
+        storageService.shouldThrow = true
+
+        let viewModel = await HomeViewModel(storageService: storageService)
+        let mockScan = MockScan(pageCount: 1)
+
+        await MainActor.run {
+            viewModel.scanDocument = mockScan
+            viewModel.documentName = "Test Error"
+        }
+
+        await viewModel.createDocument()
+
+        await MainActor.run {
+            XCTAssertTrue(storageService.didCallSave)
+            XCTAssertEqual(viewModel.scanDocument?.pageCount, 1)
+            XCTAssertEqual(viewModel.documentName, "Test Error")
+            XCTAssertFalse(viewModel.isLoading)
+        }
+    }
 }
