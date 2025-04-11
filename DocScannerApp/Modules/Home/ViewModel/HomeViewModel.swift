@@ -15,7 +15,7 @@ final class HomeViewModel: ObservableObject {
     
     // MARK: - Published state
     @Published var showScannerView = false
-    @Published var scanDocument: VNDocumentCameraScan?
+    @Published var scanDocument: ScannedDocumentProtocol?
     @Published var documentName: String = "New Document"
     @Published var askDocumentName = false
     @Published var isLoading = false
@@ -26,11 +26,10 @@ final class HomeViewModel: ObservableObject {
         self.storageService = storageService
     }
 
-    // MARK: - Actions
     func handleScanFinished(_ scan: VNDocumentCameraScan) {
-        self.scanDocument = scan
-        self.showScannerView = false
-        self.askDocumentName = true
+        scanDocument = ScannedDocument(scan: scan)
+        showScannerView = false
+        askDocumentName = true
     }
 
     func handleScanCancelled() {
@@ -40,31 +39,49 @@ final class HomeViewModel: ObservableObject {
     func handleScanFailed(_ error: Error) {
         self.showScannerView = false
     }
-
-    func createDocument() {
+    
+    @MainActor
+    func createDocument() async {
         guard let scanDocument else { return }
+
         isLoading = true
 
-        Task {
-            do {
-                try await storageService.save(scan: scanDocument, name: documentName)
+        do {
+            try await storageService.save(scan: scanDocument, name: documentName)
 
-                await MainActor.run {
-                    self.scanDocument = nil
-                    self.documentName = "New Document"
-                    self.isLoading = false
-                }
-
-            } catch {
-                await MainActor.run {
-                    self.isLoading = false
-                }
-            }
+            self.scanDocument = nil
+            documentName = "New Document"
+            isLoading = false
+        } catch {
+            isLoading = false
         }
     }
     
+//    func createDocument() {
+//        guard let scanDocument else { return }
+//        try await storageService.save(scan: scanDocument, name: documentName)
+//        isLoading = true
+//
+//        Task {
+//            do {
+//                try await storageService.save(scan: scanDocument, name: documentName)
+//
+//                await MainActor.run {
+//                    self.scanDocument = nil
+//                    self.documentName = "New Document"
+//                    self.isLoading = false
+//                }
+//
+//            } catch {
+//                await MainActor.run {
+//                    self.isLoading = false
+//                }
+//            }
+//        }
+//    }
+    
     func finishScan(scan: VNDocumentCameraScan) {
-        scanDocument = scan
+        scanDocument = ScannedDocument(scan: scan)
         showScannerView = false
         askDocumentName = true
     }

@@ -57,7 +57,9 @@ struct HomeView: View {
             TextField("New Document", text: $viewModel.documentName)
             
             Button("Save") {
-                viewModel.createDocument()
+                Task {
+                    await viewModel.createDocument()
+                }
             }
             .disabled(viewModel.documentName.isEmpty)
         }
