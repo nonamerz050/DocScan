@@ -57,29 +57,6 @@ final class HomeViewModel: ObservableObject {
         }
     }
     
-//    func createDocument() {
-//        guard let scanDocument else { return }
-//        try await storageService.save(scan: scanDocument, name: documentName)
-//        isLoading = true
-//
-//        Task {
-//            do {
-//                try await storageService.save(scan: scanDocument, name: documentName)
-//
-//                await MainActor.run {
-//                    self.scanDocument = nil
-//                    self.documentName = "New Document"
-//                    self.isLoading = false
-//                }
-//
-//            } catch {
-//                await MainActor.run {
-//                    self.isLoading = false
-//                }
-//            }
-//        }
-//    }
-    
     func finishScan(scan: VNDocumentCameraScan) {
         scanDocument = ScannedDocument(scan: scan)
         showScannerView = false

@@ -81,7 +81,7 @@ struct DocumentDetailView: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity, alignment: .center)
             .overlay(alignment: .trailing) {
-                /// Lock Button
+
                 Button {
                     document.isLocked.toggle()
                     isUnlocked = !document.isLocked
@@ -97,7 +97,6 @@ struct DocumentDetailView: View {
     @ViewBuilder
     private func footerView() -> some View {
         HStack {
-            /// Share Button
             Button(action: createAndShareDocument) {
                 Image(systemName: "square.and.arrow.up.fill")
                     .font(.title3)

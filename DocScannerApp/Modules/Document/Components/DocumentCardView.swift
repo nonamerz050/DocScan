@@ -9,14 +9,13 @@
 import SwiftUI
 
 struct DocumentCardView: View {
-    var document: Document
-    /// For Zoom Transition
-    var animationID: Namespace.ID
-    /// View Properties
     @State private var downsizedImage: UIImage?
+    
+    var document: Document
+    var animationID: Namespace.ID
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            /// Sorting Pages
             if let firstPage = document.pages?.sorted(by: { $0.pageIndex < $1.pageIndex }).first {
                 GeometryReader {
                     let size = $0.size
@@ -30,7 +29,6 @@ struct DocumentCardView: View {
                         Rectangle()
                             .foregroundStyle(.clear)
                             .task(priority: .high) {
-                                /// Downsizing Image
                                 guard let image = UIImage(data: firstPage.pageData) else { return }
                                 let aspectSize = image.size.aspectFit(.init(width: 150, height: 150))
                                 let renderer = UIGraphicsImageRenderer(size: aspectSize)

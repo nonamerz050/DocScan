@@ -5,7 +5,6 @@
 //  Created by Artem Kolesnik on 10.04.2025.
 //
 
-
 import SwiftUI
 
 struct IntroScreen: View {

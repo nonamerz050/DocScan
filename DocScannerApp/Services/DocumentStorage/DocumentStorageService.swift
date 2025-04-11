@@ -34,23 +34,4 @@ final class DocumentStorageService: DocumentStorageServiceProtocol {
             try context.save()
         }
     }
-
-//    func save(scan: VNDocumentCameraScan, name: String) async throws {
-//        let document = Document(name: name)
-//        var pages: [DocumentPage] = []
-//
-//        for pageIndex in 0..<scan.pageCount {
-//            let pageImage = scan.imageOfPage(at: pageIndex)
-//            guard let pageData = pageImage.jpegData(compressionQuality: 0.65) else { continue }
-//            let page = DocumentPage(document: document, pageIndex: pageIndex, pageData: pageData)
-//            pages.append(page)
-//        }
-//
-//        document.pages = pages
-//
-//        try await MainActor.run {
-//            context.insert(document)
-//            try context.save()
-//        }
-//    }
 }

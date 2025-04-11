@@ -10,6 +10,3 @@ import VisionKit
 protocol DocumentStorageServiceProtocol {
     func save(scan: ScannedDocumentProtocol, name: String) async throws
 }
-//protocol DocumentStorageServiceProtocol {
-//    func save(scan: VNDocumentCameraScan, name: String) async throws
-//}
