@@ -5,7 +5,7 @@
 ---
 
 ## 🚀 Features
-
+- 🎬 Onboarding with animated morphing symbols (shown on first launch)
 - 📷 Scan documents using the native camera interface (VisionKit)
 - 🗂 Store scanned documents locally using SwiftData
 - 🔐 Secure documents individually with Face ID / Touch ID
@@ -34,6 +34,7 @@
 - ✅ **Dependency Injection** using a centralized `DIContainer`
 - ✅ Modular structure: `Home`, `Scanner`, `Document`, `Services`
 - ✅ Clean MVVM architecture with clear separation of responsibilities
+- ✅ Custom morphing animation with `Canvas` + `KeyframeAnimator` (`MorphingSymbolView`)
 
 ---
 
