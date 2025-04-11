@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @AppStorage("showIntroView") private var showIntroView: Bool = true
+    @Environment(\.modelContext) private var context
     
     var body: some View {
-        Home()
+        HomeViewBuilder.make()
             .sheet(isPresented: $showIntroView) {
                 IntroScreen()
                     .interactiveDismissDisabled()

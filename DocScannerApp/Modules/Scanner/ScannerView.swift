@@ -5,45 +5,45 @@
 //  Created by Artem Kolesnik on 10.04.2025.
 //
 
-
 import SwiftUI
 import VisionKit
 
-struct ScannerView : UIViewControllerRepresentable {
-    var didFinishWithError: (Error) -> ()
-    var didCancel: () -> ()
-    var didFinish: (VNDocumentCameraScan) -> ()
-    
+struct ScannerView: UIViewControllerRepresentable {
+    let scannerService: ScannerServiceProtocol
+    let onResult: (Result<VNDocumentCameraScan, Error>) -> Void
+
     func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
+        Coordinator(onResult: onResult)
     }
-    
+
     func makeUIViewController(context: Context) -> VNDocumentCameraViewController {
         let controller = VNDocumentCameraViewController()
         controller.delegate = context.coordinator
         return controller
     }
-    
-    func updateUIViewController(_ uiViewController: VNDocumentCameraViewController, context: Context) {
-        
-    }
-    
-    class Coordinator : NSObject, VNDocumentCameraViewControllerDelegate {
-        var parent: ScannerView
-        init(parent: ScannerView) {
-            self.parent = parent
+
+    func updateUIViewController(_ uiViewController: VNDocumentCameraViewController, context: Context) {}
+
+    final class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
+        let onResult: (Result<VNDocumentCameraScan, Error>) -> Void
+
+        init(onResult: @escaping (Result<VNDocumentCameraScan, Error>) -> Void) {
+            self.onResult = onResult
         }
-        
+
         func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
-            parent.didFinish(scan)
+            controller.dismiss(animated: true)
+            onResult(.success(scan))
         }
-        
+
         func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
-            parent.didCancel()
+            controller.dismiss(animated: true)
+            onResult(.failure(NSError(domain: "UserCancelled", code: 0)))
         }
-        
-        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: any Error) {
-            parent.didFinishWithError(error)
+
+        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
+            controller.dismiss(animated: true)
+            onResult(.failure(error))
         }
     }
 }
