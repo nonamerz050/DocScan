@@ -50,8 +50,9 @@ To run the tests:
 ```bash
 Cmd + U
 # or via Product > Test
+```
 
 ## 📦  Installation
-
 ```bash
 git clone https://github.com/твой-логин/DocumentScanner.git
+```
