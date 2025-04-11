@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct IntroScreen: View {
-    @AppStorage("showIntroView") private var showIntroView: Bool = true
+struct WhatsNewScreen: View {
+    @AppStorage("showWhatsNew") private var showWhatsNew: Bool = true
     
     var body: some View {
         VStack(spacing: 15) {
@@ -46,7 +46,7 @@ struct IntroScreen: View {
     }
 }
 
-extension IntroScreen {
+extension WhatsNewScreen {
     @ViewBuilder
     private func pointView(title: String, image: String, description: String, color: Color = .blue) -> some View {
         HStack(spacing: 15) {
@@ -69,7 +69,7 @@ extension IntroScreen {
     
     var button: some View {
         Button {
-            showIntroView = false
+            showWhatsNew = false
         } label: {
             Text("Start using Document Scanner")
                 .fontWeight(.bold)
@@ -82,5 +82,5 @@ extension IntroScreen {
 }
 
 #Preview {
-    IntroScreen()
+    WhatsNewScreen()
 }

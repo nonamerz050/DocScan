@@ -80,8 +80,8 @@ struct HomeView: View {
             .foregroundStyle(.white)
             .fontWeight(.semibold)
             .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            .background(.purple.gradient, in: .capsule)
+            .padding(.vertical, 15)
+            .background(.blue.gradient, in: .capsule)
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .padding(.vertical, 10)

@@ -8,15 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    @AppStorage("showIntroView") private var showIntroView: Bool = true
     @Environment(\.modelContext) private var context
     
+    @AppStorage("showIntroView") private var hasSeenIntro: Bool = false
+    @AppStorage("showWhatsNew") private var showWhatsNew: Bool = false
+    
     var body: some View {
-        HomeViewBuilder.make()
-            .sheet(isPresented: $showIntroView) {
-                IntroScreen()
-                    .interactiveDismissDisabled()
+        if hasSeenIntro {
+            HomeViewBuilder.make()
+                .sheet(isPresented: $showWhatsNew) {
+                    WhatsNewScreen()
+                        .interactiveDismissDisabled()
+                }
+        } else {
+            IntroViewBuilder.make {
+                hasSeenIntro = true
             }
+        }
     }
 }
 

@@ -89,7 +89,7 @@ struct DocumentDetailView: View {
                 } label: {
                     Image(systemName: document.isLocked ? "lock.fill" : "lock.open.fill")
                         .font(.title3)
-                        .foregroundStyle(.purple)
+                        .foregroundStyle(.blue)
                 }
             }
     }
@@ -100,7 +100,7 @@ struct DocumentDetailView: View {
             Button(action: createAndShareDocument) {
                 Image(systemName: "square.and.arrow.up.fill")
                     .font(.title3)
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(.blue)
             }
             
             Spacer(minLength: 0)
