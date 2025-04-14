@@ -40,14 +40,12 @@ struct DocumentDetailView: View {
                     }
                 }
                 .tabViewStyle(.page)
-                
-                footerView()
             }
             .background(.black)
             .toolbarVisibility(.hidden, for: .navigationBar)
             .loadingScreen(status: $isLoading)
             .overlay {
-                LockView()
+                lockView()
             }
             .fileMover(isPresented: $showFileMover, file: fileURL) { result in
                 if case .failure(_) = result {
@@ -77,52 +75,52 @@ struct DocumentDetailView: View {
     @ViewBuilder
     private func headerView() -> some View {
         Text(document.name)
-            .font(.callout)
+            .font(.system(size: 20))
             .foregroundStyle(.white)
+            .lineLimit(2)
+            .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity, alignment: .center)
-            .overlay(alignment: .trailing) {
+            .padding(.horizontal, 65)
+            .overlay {
+                HStack(spacing: 15) {
+                    Button {
+                        document.isLocked.toggle()
+                        isUnlocked = !document.isLocked
+                        try? context.save()
+                    } label: {
+                        IconView(name: document.isLocked ? .lockFill : .lockOpenFill,
+                                 fontSize: 22,
+                                 color: .blue)
+                    }
+                    
+                    Button {
+                        createAndShareDocument()
+                    } label: {
+                        IconView(name: .squareArrowUpFill,
+                                 fontSize: 20,
+                                 color: .blue)
+                    }
 
-                Button {
-                    document.isLocked.toggle()
-                    isUnlocked = !document.isLocked
-                    try? context.save()
-                } label: {
-                    Image(systemName: document.isLocked ? "lock.fill" : "lock.open.fill")
-                        .font(.title3)
-                        .foregroundStyle(.blue)
+                    Spacer()
+                    
+                    Button {
+                        dismiss()
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .seconds(0.3))
+                            context.delete(document)
+                            try? context.save()
+                        }
+                    } label: {
+                        IconView(name: .trashFill,
+                                 fontSize: 20,
+                                 color: .red)
+                    }
                 }
             }
     }
     
     @ViewBuilder
-    private func footerView() -> some View {
-        HStack {
-            Button(action: createAndShareDocument) {
-                Image(systemName: "square.and.arrow.up.fill")
-                    .font(.title3)
-                    .foregroundStyle(.blue)
-            }
-            
-            Spacer(minLength: 0)
-            
-            Button {
-                dismiss()
-                Task { @MainActor in
-                    try? await Task.sleep(for: .seconds(0.3))
-                    context.delete(document)
-                    try? context.save()
-                }
-            } label: {
-                Image(systemName: "trash.fill")
-                    .font(.title3)
-                    .foregroundStyle(.red)
-            }
-        }
-        .padding([.horizontal, .bottom], 15)
-    }
-    
-    @ViewBuilder
-    private func LockView() -> some View {
+    private func lockView() -> some View {
         if document.isLocked {
             ZStack {
                 Rectangle()
@@ -142,9 +140,6 @@ struct DocumentDetailView: View {
                             .font(.callout)
                     }
                 }
-                .padding(15)
-                .background(.bar, in: .rect(cornerRadius: 10))
-                .contentShape(.rect)
                 .onTapGesture(perform: authenticateUser)
             }
             .opacity(isUnlocked ? 0 : 1)
