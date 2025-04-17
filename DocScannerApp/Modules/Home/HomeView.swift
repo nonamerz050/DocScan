@@ -12,7 +12,7 @@ import VisionKit
 
 struct HomeView: View {    
     @StateObject private var viewModel: HomeViewModel
-    
+    @AppStorage("showIntroView") private var hasSeenIntro: Bool = false
     @Namespace private var animationID
     
     @Query(sort: [.init(\Document.createdAt, order: .reverse)], animation: .smooth) private var documents: [Document]
@@ -36,6 +36,16 @@ struct HomeView: View {
                     }
                 }
                 .padding(15)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        hasSeenIntro = false
+                    } label: {
+                        Text("Show Intro")
+                    }
+
+                }
             }
             .navigationTitle("Private Documents")
             .safeAreaInset(edge: .bottom) {

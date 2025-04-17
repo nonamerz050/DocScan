@@ -55,5 +55,5 @@ Cmd + U
 
 ## 📦  Installation
 ```bash
-git clone https://github.com/твой-логин/DocumentScanner.git
+git clone https://github.com/nonamerz050/ExampleProject.git
 ```
